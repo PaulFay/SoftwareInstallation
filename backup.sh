@@ -1,4 +1,10 @@
 #!/bin/bash
+#C - Create new backup archive
+#V - Print what its doing
+#P - Preserves the permissions
+#Z - Makes it a gzip
+#F - Filename
+#X - Extract
 PS3="Please select an option: "
 options=("Full backup" "Home backup" "Full restore" "Home restore" "Exit")
 select opt in "${options[@]}"
@@ -6,7 +12,7 @@ do
 case $opt in
 	"Full backup")
 			echo "Beginning full backup.."
-			sudo tar -cvpzf fullbackup.tar.gz \
+			sudo tar --listed-incremental=snapshot.file -cvpzf fullbackup.tar.gz \
 			--exclude=/fullbackup.tar.gz \
 			--exclude=/homebackup.tar.gz \
 			--exclude=/home/user/restores/* \
@@ -25,9 +31,9 @@ case $opt in
 	"Home backup")
 			echo "Beginning Home backup.."
 			sudo tar -cvpzf homebackup.tar.gz \
-			--exclude=/home/user/fullbackup.tar.gz \
-			--exclude=/home/user/homebackup.tar.gz \
-			--exclude=/home/user/restores/* \
+			--exclude=home/user/fullbackup.tar.gz \
+			--exclude=home/user/homebackup.tar.gz \
+			--exclude=home/user/restores/* \
  			--exclude=/dev \
 			--exclude=/proc \
 			--exclude=/root \
